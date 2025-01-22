@@ -1,0 +1,19 @@
+#!/bin/bash
+
+PROJECT=$1
+METHOD="${2:-dev}"
+OUTPUT=""
+
+if [[ "$METHOD" == strapi ]]
+then
+    CONTAINER="${3:-node}"
+    OUTPUT=$(docker compose run -d --service-ports $CONTAINER npm run start)
+else
+    cd $PROJECT && npm run $METHOD &
+    sleep 2
+    OUTPUT=$(lsof -i:3000 | grep -P 'node    \d+' -o | grep -P '\d+' -o)	
+fi
+
+echo $PROJECT: $OUTPUT >> /home/maxime/automatics/memo/auto_run.txt
+
+cd ..

@@ -1,0 +1,8 @@
+#!bin/bash
+
+PROJECT=$1
+IDS=$(cat /home/maxime/automatics/memo/auto_run.txt | grep -P "$PROJECT: [a-zA-Z0-9]+" -o | grep -P '[a-zA-Z0-9]+' -o)
+
+kill $IDS > /dev/null 2>&1
+docker kill $IDS > /dev/null 2>&1
+sed -i "/$PROJECT: /d" /home/maxime/automatics/memo/auto_run.txt
