@@ -11,7 +11,12 @@ then
 else
     cd $PROJECT && npm run $METHOD &
     sleep 2
-    OUTPUT=$(lsof -i:3000 | grep -P 'node    \d+' -o | grep -P '\d+' -o)	
+    OUTPUT=$(lsof -i:3000 | grep -P 'node    \d+' -o | grep -P '\d+' -o)
+
+    if [[ "$OUPUT" == "" ]]
+    then
+        OUTPUT=$(lsof -i:3000 | grep -P 'next-rout \d+' -o | grep -P '\d+' -o)
+    fi
 fi
 
 echo $PROJECT: $OUTPUT >> /home/maxime/automatics/memo/auto_run.txt
