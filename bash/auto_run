@@ -13,7 +13,7 @@ else
     sleep 2
     OUTPUT=$(lsof -i:3000 | grep -P 'node    \d+' -o | grep -P '\d+' -o)
 
-    if [[ "$OUPUT" == "" ]]
+    if [[ "$OUTPUT" == "" ]]
     then
         OUTPUT=$(lsof -i:3000 | grep -P 'next-rout \d+' -o | grep -P '\d+' -o)
     fi
