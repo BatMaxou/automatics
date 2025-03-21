@@ -1,21 +1,25 @@
 #!/bin/bash
 
 PROJECT=$1
-METHOD="${2:-dev}"
+SCRIPT="${2:-start}"
+METHOD="${3:-raw}"
 OUTPUT=""
 
-if [[ "$METHOD" == strapi ]]
+
+if [[ "$METHOD" == docker ]]
 then
-    CONTAINER="${3:-node}"
-    OUTPUT=$(docker compose run -d --service-ports $CONTAINER npm run start)
+    cd $PROJECT
+    CONTAINER="${4:-node}"
+    OUTPUT=$(docker compose run --rm --detach --service-ports $CONTAINER npm run $SCRIPT)
 else
-    cd $PROJECT && npm run $METHOD &
+    cd $PROJECT && npm run $SCRIPT &
     sleep 2
-    OUTPUT=$(lsof -i:3000 | grep -P 'node    \d+' -o | grep -P '\d+' -o)
+    PORT="${4:-3000}"
+    OUTPUT=$(lsof -i:$PORT | grep -P 'node    \d+' -o | grep -P '\d+' -o)
 
     if [[ "$OUTPUT" == "" ]]
     then
-        OUTPUT=$(lsof -i:3000 | grep -P 'next-rout \d+' -o | grep -P '\d+' -o)
+        OUTPUT=$(lsof -i:$PORT | grep -P 'next-rout \d+' -o | grep -P '\d+' -o)
     fi
 fi
 
